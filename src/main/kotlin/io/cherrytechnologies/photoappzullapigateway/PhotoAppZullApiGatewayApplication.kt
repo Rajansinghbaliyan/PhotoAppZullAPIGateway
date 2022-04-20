@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class PhotoAppZullApiGatewayApplication
 
 fun main(args: Array<String>) {
-	runApplication<PhotoAppZullApiGatewayApplication>(*args)
+    runApplication<PhotoAppZullApiGatewayApplication>(*args)
 }
