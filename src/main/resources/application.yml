@@ -17,12 +17,12 @@ spring:
             - Path=/user-api/**
           filters:
             - RewritePath=/user-api/(?<path>.*), /$\{path}
-        - id: account-management
-          uri: lb://account-management
+        - id: account-management-api
+          uri: lb://account-management-api
           predicates:
-              - Path=/account-management/**
+              - Path=/account-management-api/**
           filters:
-              - RewritePath=/account-management/(?<path>.*), /$\{path}
+              - RewritePath=/account-management-api/(?<path>.*), /$\{path}
 
 eureka:
   client:
