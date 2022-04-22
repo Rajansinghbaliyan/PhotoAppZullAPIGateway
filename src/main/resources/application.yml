@@ -20,9 +20,15 @@ spring:
         - id: account-management-api
           uri: lb://account-management-api
           predicates:
-              - Path=/account-management-api/**
+            - Path=/account-management-api/**
           filters:
-              - RewritePath=/account-management-api/(?<path>.*), /$\{path}
+            - RewritePath=/account-management-api/(?<path>.*), /$\{path}
+        - id: authentication-api
+          uri: lb://authentication-api
+          predicates:
+            - Path=/authentication-api/**
+          filters:
+            - RewritePath=/authentication-api/(?<path>.*), /$\{path}
 
 eureka:
   client:
