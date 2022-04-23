@@ -15,34 +15,25 @@ import reactor.core.publisher.Mono
 
 @Component
 @RefreshScope
-class AuthenticationFilter(val jwtUtil: JwtUtil, val env:Environment) : GatewayFilter {
+class AuthenticationFilter(val jwtUtil: JwtUtil, val env: Environment) : GatewayFilter {
     override fun filter(exchange: ServerWebExchange?, chain: GatewayFilterChain?): Mono<Void> {
         try {
-            val openEndpoints = getStringArrayFromEnvironment(env,"open.urls")
-
+            val openEndpoints = getStringArrayFromEnvironment(env, "open.urls")
             val request = exchange?.request ?: throw InternalServerException("something went wrong")
-
             val isSecured = { r: ServerHttpRequest ->
                 openEndpoints
                     ?.none { r.uri.path.contains(it) }
                     ?: true
             }
+
             if (isSecured(request)) {
-                if (!request.headers.containsKey("Authorization")) {
-                    val response = exchange.response
-                    response.statusCode = HttpStatus.UNAUTHORIZED
-                    return response.setComplete()
-                }
-                val token = request.headers.getOrEmpty("Authorization")[0]
-                jwtUtil.validateToken(token)
-                val claims = jwtUtil.getClaims(token)
-                exchange.request.mutate()
-                    .header("user-id", claims.id)
-                    .header("user-email", claims.subject)
-                    .build()
+                if (!request.headers.containsKey("Authorization"))
+                    return returnBadRequest(exchange)
+                else
+                    performSecureOperations(exchange, request)
             }
-            chain ?: throw InternalServerException("something went wrong")
-            return chain.filter(exchange)
+
+            return chain?.filter(exchange) ?: throw InternalServerException("something went wrong")
 
         } catch (e: Exception) {
             val response = exchange?.response ?: throw InternalServerException("something went wrong")
@@ -50,4 +41,21 @@ class AuthenticationFilter(val jwtUtil: JwtUtil, val env:Environment) : GatewayF
             return response.setComplete()
         }
     }
+
+    fun returnBadRequest(exchange: ServerWebExchange): Mono<Void> {
+        val response = exchange.response
+        response.statusCode = HttpStatus.UNAUTHORIZED
+        return response.setComplete()
+    }
+
+    fun performSecureOperations(exchange: ServerWebExchange, request: ServerHttpRequest) {
+        val token = request.headers.getOrEmpty("Authorization")[0]
+        jwtUtil.validateToken(token)
+        val claims = jwtUtil.getClaims(token)
+        exchange.request.mutate()
+            .header("user-id", claims.id)
+            .header("user-email", claims.subject)
+            .build()
+    }
+
 }
