@@ -2,6 +2,8 @@ server:
   port: ${SERVER_PORT}
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: ${APPLICATION_NAME}
   profiles.active: ${ACTIVE_PROFILE}
@@ -10,25 +12,25 @@ spring:
       discovery:
         locator:
           enabled: true
-      routes:
-        - id: user-api
-          uri: lb://user-api
-          predicates:
-            - Path=/user-api/**
-          filters:
-            - RewritePath=/user-api/(?<path>.*), /$\{path}
-        - id: account-management-api
-          uri: lb://account-management-api
-          predicates:
-            - Path=/account-management-api/**
-          filters:
-            - RewritePath=/account-management-api/(?<path>.*), /$\{path}
-        - id: authentication-api
-          uri: lb://authentication-api
-          predicates:
-            - Path=/authentication-api/**
-          filters:
-            - RewritePath=/authentication-api/(?<path>.*), /$\{path}
+#      routes:
+#        - id: user-api
+#          uri: lb://user-api
+#          predicates:
+#            - Path=/user-api/**
+#          filters:
+#            - RewritePath=/user-api/(?<path>.*), /$\{path}
+#        - id: account-management-api
+#          uri: lb://account-management-api
+#          predicates:
+#            - Path=/account-management-api/**
+#          filters:
+#            - RewritePath=/account-management-api/(?<path>.*), /$\{path}
+#        - id: authentication-api
+#          uri: lb://authentication-api
+#          predicates:
+#            - Path=/authentication-api/**
+#          filters:
+#            - RewritePath=/authentication-api/(?<path>.*), /$\{path}
 
 eureka:
   client:
@@ -38,3 +40,10 @@ eureka:
 #    registerWithEureka: true
 #  instance:
 #    preferIpAddress: true
+
+open:
+  urls: /users/register , /auth/login
+
+jwt:
+  expiration: 7200000
+  secret: 12341234jk213l4kj123lk4j123lk4jl123kj4l23k1j4lk123j4lkjsdf7asd98gf7asd98g7as89fhj240587934yasdjfh
