@@ -31,19 +31,3 @@ spring:
 #            - Path=/authentication-api/**
 #          filters:
 #            - RewritePath=/authentication-api/(?<path>.*), /$\{path}
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8010/eureka
-#    fetchRegistry: true
-#    registerWithEureka: true
-#  instance:
-#    preferIpAddress: true
-
-open:
-  urls: /users/register , /auth/login
-
-jwt:
-  expiration: 7200000
-  secret: 12341234jk213l4kj123lk4j123lk4jl123kj4l23k1j4lk123j4lkjsdf7asd98gf7asd98g7as89fhj240587934yasdjfh

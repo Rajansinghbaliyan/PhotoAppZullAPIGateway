@@ -22,7 +22,7 @@ class RouteValidator(val authenticationFilter: AuthenticationFilter) {
             )
             .route(
                 "account-management-api",
-                returnRouteLambda("/account-management-api/**", "lb://account-management-api")
+                returnRouteLambda("/account/**", "lb://account-management-api")
             )
             .build()
 

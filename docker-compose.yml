@@ -1,0 +1,8 @@
+version: '3'
+services:
+  spring-cloud-gateway:
+    image: photo/zuul
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
