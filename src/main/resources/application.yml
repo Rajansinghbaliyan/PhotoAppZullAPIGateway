@@ -31,3 +31,5 @@ spring:
 #            - Path=/authentication-api/**
 #          filters:
 #            - RewritePath=/authentication-api/(?<path>.*), /$\{path}
+open:
+  urls: /users/register , /auth/login
